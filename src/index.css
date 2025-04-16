@@ -1,0 +1,609 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Animações */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(79, 70, 229, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
+  }
+}
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-gray-50;
+  }
+
+  section {
+    animation: fadeIn 0.6s ease-out;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Cards de Curso */
+  .course-card {
+    @apply bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer relative;
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .course-card:hover {
+    @apply transform -translate-y-1;
+  }
+
+  .course-card-image {
+    @apply w-full h-48 object-cover transition-transform duration-300;
+  }
+
+  .course-card:hover .course-card-image {
+    @apply transform scale-105;
+  }
+
+  /* Cards de Categoria */
+  .category-card {
+    @apply bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer;
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .category-card:hover {
+    @apply transform -translate-y-1 bg-gray-50;
+  }
+
+  .category-icon {
+    @apply w-10 h-10 flex items-center justify-center rounded-lg bg-indigo-100 text-primary group-hover:bg-primary group-hover:text-white transition-colors duration-200;
+  }
+
+  .category-card:hover .category-icon {
+    @apply transform scale-110;
+  }
+
+  /* Cards de Depoimento */
+  .testimonial-card {
+    @apply bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-all duration-300;
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .testimonial-card:hover {
+    @apply transform -translate-y-1;
+  }
+
+  /* Cards de Recursos */
+  .feature-card {
+    @apply bg-white p-8 rounded-lg shadow-sm hover:shadow-md transition-all duration-300;
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .feature-card:hover {
+    @apply transform -translate-y-1;
+  }
+
+  .feature-icon {
+    @apply text-primary text-4xl mb-4 transition-transform duration-300;
+  }
+
+  .feature-card:hover .feature-icon {
+    @apply transform scale-110;
+  }
+
+  /* Estatísticas */
+  .stat-card {
+    @apply flex flex-col items-center text-center p-6 rounded-lg bg-gray-50 hover:bg-white transition-all duration-300;
+    animation: scaleIn 0.3s ease-out;
+  }
+
+  .stat-card:hover {
+    @apply transform -translate-y-1 shadow-md;
+  }
+
+  /* Botões */
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-all duration-300;
+  }
+
+  .btn:hover {
+    @apply transform -translate-y-0.5;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    @apply relative bg-gradient-to-r from-primary to-primary-dark text-white overflow-hidden;
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  /* Títulos de Seção */
+  .section-title {
+    @apply text-3xl font-bold mb-4;
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .section-subtitle {
+    @apply text-xl text-gray-600 mb-8 max-w-3xl mx-auto;
+    animation: fadeIn 0.8s ease-out;
+  }
+
+  /* Plano Ilimitado */
+  .unlimited-plan-section {
+    @apply relative overflow-hidden bg-gradient-to-br from-primary-dark via-primary to-secondary py-12;
+  }
+
+  .unlimited-plan-card {
+    @apply bg-white rounded-xl p-6 shadow-lg relative overflow-hidden transition-all duration-300 hover:shadow-xl max-w-3xl mx-auto;
+    animation: scaleIn 0.5s ease-out;
+  }
+
+  .unlimited-plan-card:hover {
+    @apply transform -translate-y-2;
+  }
+
+  .unlimited-plan-badge {
+    @apply inline-flex items-center bg-orange-100 text-accent px-3 py-1 rounded-full text-xs font-semibold mb-4;
+  }
+
+  .unlimited-plan-price {
+    @apply text-4xl font-bold text-primary mb-4 flex items-end justify-center;
+  }
+
+  .unlimited-plan-price-currency {
+    @apply text-2xl mr-1 text-gray-600;
+  }
+
+  .unlimited-plan-price-period {
+    @apply text-lg text-gray-500 ml-2 mb-1;
+  }
+
+  .unlimited-plan-features {
+    @apply grid grid-cols-1 md:grid-cols-2 gap-3 my-4;
+  }
+
+  .unlimited-plan-feature {
+    @apply flex items-center text-gray-700 text-sm;
+  }
+
+  .unlimited-plan-feature-icon {
+    @apply text-primary mr-3 text-xl;
+  }
+
+  .unlimited-plan-button {
+    @apply w-full bg-primary text-white py-3 rounded-lg font-semibold mt-4 transition-all duration-300 hover:bg-primary-dark hover:shadow-md;
+  }
+
+  .unlimited-plan-shapes {
+    @apply absolute inset-0 overflow-hidden pointer-events-none;
+  }
+
+  .unlimited-plan-shape {
+    @apply absolute opacity-10 bg-white rounded-full;
+  }
+
+  .unlimited-plan-shape-1 {
+    @apply w-64 h-64 -top-32 -left-32 blur-3xl;
+  }
+
+  .unlimited-plan-shape-2 {
+    @apply w-96 h-96 -bottom-48 -right-48 blur-3xl;
+  }
+}
+
+:root {
+  --color-primary: #4f46e5;
+  --color-primary-dark: #4338ca;
+  --color-secondary: #10b981;
+  --color-secondary-dark: #059669;
+  --color-accent: #f59e0b;
+  --color-accent-dark: #d97706;
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-primary-dark {
+  background-color: var(--color-primary-dark);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary);
+}
+
+.bg-secondary-dark {
+  background-color: var(--color-secondary-dark);
+}
+
+.text-accent {
+  color: var(--color-accent);
+}
+
+.bg-accent {
+  background-color: var(--color-accent);
+}
+
+.bg-accent-dark {
+  background-color: var(--color-accent-dark);
+}
+
+/* Estilos para cards de curso */
+.course-card-content {
+  @apply p-4;
+}
+
+.course-card-title {
+  @apply text-lg font-semibold mb-2 text-gray-800;
+}
+
+.course-card-instructor {
+  @apply text-sm text-gray-600 mb-2;
+}
+
+.course-card-price {
+  @apply text-xl font-bold text-primary;
+}
+
+.course-card-rating {
+  @apply flex items-center text-yellow-400 text-sm mb-2;
+}
+
+.course-card-students {
+  @apply text-sm text-gray-500;
+}
+
+/* Estilos para botões */
+.btn-primary {
+  @apply bg-primary text-white hover:bg-primary-dark;
+}
+
+.btn-secondary {
+  @apply bg-secondary text-white hover:bg-secondary-dark;
+}
+
+.btn-accent {
+  @apply bg-accent text-white hover:bg-accent-dark;
+}
+
+.btn-outline {
+  @apply border-2 border-primary text-primary hover:bg-primary hover:text-white;
+}
+
+/* Estilos para seções */
+.section-subtitle {
+  @apply text-xl text-gray-600 mb-8 max-w-3xl mx-auto;
+}
+
+/* Estilos para depoimentos */
+.testimonial-avatar {
+  @apply w-12 h-12 rounded-full;
+}
+
+.testimonial-name {
+  @apply font-semibold text-gray-800;
+}
+
+.testimonial-role {
+  @apply text-sm text-gray-500;
+}
+
+.testimonial-text {
+  @apply text-gray-600 italic mt-4;
+}
+
+/* Estilos para categorias */
+.category-name {
+  @apply font-semibold text-lg mb-1;
+}
+
+.category-count {
+  @apply text-gray-500 text-sm;
+}
+
+/* Estilos para estatísticas */
+.stat-value {
+  @apply text-4xl font-bold text-primary mb-2;
+}
+
+.stat-label {
+  @apply text-gray-600;
+}
+
+/* Estilos para recursos */
+.feature-title {
+  @apply text-xl font-semibold mb-3;
+}
+
+.feature-description {
+  @apply text-gray-600;
+}
+
+/* Estilos para o footer */
+.footer {
+  @apply bg-gray-900 text-white py-12 mt-auto;
+}
+
+.footer-container {
+  @apply container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8;
+}
+
+.footer-section {
+  @apply space-y-4;
+}
+
+.footer-brand {
+  @apply space-y-4;
+}
+
+.footer-brand-description {
+  @apply text-gray-400 text-sm;
+}
+
+.footer-social {
+  @apply flex space-x-4;
+}
+
+.footer-social-link {
+  @apply text-gray-400 hover:text-white transition-colors;
+}
+
+.footer-title {
+  @apply text-lg font-semibold mb-4 text-white;
+}
+
+.footer-list {
+  @apply space-y-2;
+}
+
+.footer-link {
+  @apply text-gray-400 hover:text-white transition-colors block;
+}
+
+.footer-bottom {
+  @apply mt-12 pt-8 border-t border-gray-800;
+}
+
+.footer-bottom-content {
+  @apply container text-center text-gray-400 text-sm;
+}
+
+/* Estilos para o hero */
+.hero-overlay {
+  @apply absolute inset-0 bg-black opacity-20;
+}
+
+.hero-image {
+  @apply absolute right-0 top-0 h-full w-1/2 bg-cover bg-center opacity-10;
+}
+
+.hero-content {
+  @apply container mx-auto px-4 py-16 md:py-24 relative z-10;
+}
+
+.hero-title {
+  @apply text-5xl md:text-6xl font-bold mb-6 leading-tight;
+}
+
+.hero-subtitle {
+  @apply text-xl md:text-2xl mb-8 text-gray-100;
+}
+
+/* Estilos para o header */
+.header {
+  @apply fixed top-0 left-0 right-0 z-50 bg-white shadow-md;
+}
+
+.header-container {
+  @apply container mx-auto;
+}
+
+.header-content {
+  @apply flex items-center justify-between h-16 px-4;
+}
+
+.header-logo {
+  @apply flex items-center;
+}
+
+.header-logo-text {
+  @apply text-2xl font-bold;
+}
+
+.header-logo-text-primary {
+  @apply text-primary;
+}
+
+.header-logo-text-dark {
+  @apply text-gray-800;
+}
+
+.header-nav {
+  @apply hidden md:flex items-center space-x-8;
+}
+
+.header-nav-link {
+  @apply text-gray-600 hover:text-primary transition-colors;
+}
+
+.header-search {
+  @apply hidden md:flex items-center flex-1 max-w-md mx-8;
+}
+
+.header-search-input {
+  @apply w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:border-primary;
+}
+
+.header-search-icon {
+  @apply absolute right-3 top-3 text-gray-400;
+}
+
+.header-actions {
+  @apply flex items-center space-x-4;
+}
+
+.header-action-button {
+  @apply hidden md:flex items-center text-gray-600 hover:text-primary transition-colors;
+}
+
+.header-action-icon {
+  @apply text-xl;
+}
+
+.header-action-text {
+  @apply ml-2;
+}
+
+.header-mobile-menu-button {
+  @apply md:hidden text-gray-600 hover:text-primary;
+}
+
+.header-mobile-menu {
+  @apply md:hidden bg-white border-t border-gray-200;
+}
+
+.header-mobile-menu-content {
+  @apply px-4 py-3;
+}
+
+.header-mobile-menu-search {
+  @apply relative;
+}
+
+.header-mobile-menu-nav {
+  @apply px-4 py-2 space-y-2;
+}
+
+.header-mobile-menu-link {
+  @apply block py-2 text-gray-600 hover:text-primary transition-colors;
+}
+
+/* Ajuste do layout principal */
+#root {
+  @apply flex flex-col min-h-screen;
+}
+
+main {
+  @apply flex-grow;
+}
+
+/* Categorias Dropdown */
+.categories-dropdown {
+  @apply fixed inset-0 z-50 bg-black/50 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300;
+}
+
+.categories-dropdown.open {
+  @apply opacity-100 pointer-events-auto;
+}
+
+.categories-content {
+  @apply fixed top-16 left-1/2 -translate-x-1/2 w-full max-w-6xl max-h-[80vh] bg-white rounded-2xl shadow-2xl p-8 overflow-y-auto transform -translate-y-10 opacity-0 transition-all duration-300;
+}
+
+.categories-dropdown.open .categories-content {
+  @apply translate-y-0 opacity-100;
+}
+
+.categories-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6;
+}
+
+.category-group {
+  @apply space-y-3;
+}
+
+.category-link {
+  @apply flex items-center space-x-3 p-3 rounded-xl hover:bg-gray-50 transition-colors duration-200;
+}
+
+.category-link.group {
+  @apply hover:bg-gray-50;
+}
+
+.category-text {
+  @apply text-gray-700 group-hover:text-primary transition-colors duration-200;
+}
+
+.categories-header {
+  @apply flex items-center justify-between mb-8 pb-6 border-b border-gray-200;
+}
+
+.categories-title {
+  @apply text-2xl font-bold text-gray-800;
+}
+
+.categories-close {
+  @apply p-2 hover:bg-gray-100 rounded-full transition-colors duration-200;
+}
+
+.categories-search {
+  @apply relative mb-8;
+}
+
+.categories-search-input {
+  @apply w-full pl-12 pr-4 py-3 bg-gray-50 border-0 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:bg-white transition-all duration-200;
+}
+
+.categories-search-icon {
+  @apply absolute left-4 top-1/2 -translate-y-1/2 text-gray-400;
+}
+
+/* Scrollbar personalizada */
+.categories-content::-webkit-scrollbar {
+  @apply w-2;
+}
+
+.categories-content::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.categories-content::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full hover:bg-gray-400 transition-colors duration-200;
+}
