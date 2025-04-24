@@ -1,18 +1,8 @@
-import { Header } from '../components/Header';
 import { FaPlay, FaStar, FaGraduationCap, FaCertificate, FaHeadset, FaUserGraduate, FaClock, FaMobileAlt, FaCheck, FaHeadphones, FaRocket, FaInfinity, FaCrown } from 'react-icons/fa';
 import { AiFillStar } from 'react-icons/ai';
-
-// Categorias de cursos
-const categories = [
-  { id: 1, name: 'Desenvolvimento Web', icon: '💻', count: 24 },
-  { id: 2, name: 'Data Science', icon: '📊', count: 18 },
-  { id: 3, name: 'Marketing Digital', icon: '📱', count: 32 },
-  { id: 4, name: 'Design', icon: '🎨', count: 15 },
-  { id: 5, name: 'Negócios', icon: '💼', count: 28 },
-  { id: 6, name: 'Idiomas', icon: '🌍', count: 12 },
-  { id: 7, name: 'Fotografia', icon: '📸', count: 9 },
-  { id: 8, name: 'Produtividade', icon: '⏱️', count: 14 },
-];
+import { useEffect, useState } from 'react';
+import { Category } from '../types/Category';
+import categoryService from '../services/api/categoryService';
 
 // Depoimentos
 const testimonials = [
@@ -43,13 +33,37 @@ const testimonials = [
 ];
 
 export const Home = () => {
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        setLoadingCategories(true);
+        const response = await categoryService.getCategories();
+        
+        if (response) {
+          // Filter out categories without description or with empty title or slug
+          const validCategories = response.filter(cat => 
+            cat.category_title && 
+            cat.category_slug &&
+            cat.category_description !== null
+          );
+          setCategories(validCategories.slice(0, 3)); // Get only 3 categories for homepage
+        }
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoadingCategories(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header />
-      
-      {/* Main content with padding-top to account for fixed header */}
-      <main className="pt-16">
+      <main className="page-container">
         {/* Hero Section */}
         <div className="relative bg-gradient-to-r from-primary to-primary-dark text-white overflow-hidden">
           <div className="absolute inset-0 bg-black opacity-20"></div>
@@ -284,19 +298,54 @@ export const Home = () => {
                 Encontre cursos que se adequam aos seus interesses e objetivos profissionais
               </p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {categories.map((category) => (
-                <a 
-                  key={category.id} 
-                  href={`/categorias/${category.id}`}
-                  className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow flex flex-col items-center text-center"
-                >
-                  <span className="text-4xl mb-3">{category.icon}</span>
-                  <h3 className="font-semibold text-lg mb-1">{category.name}</h3>
-                  <p className="text-gray-500 text-sm">{category.count} cursos</p>
-                </a>
-              ))}
-            </div>
+            
+            {loadingCategories && (
+              <div className="flex justify-center items-center h-40">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+              </div>
+            )}
+            
+            {!loadingCategories && categories.length > 0 && (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+                  {categories.map((category) => (
+                    <a 
+                      key={category.category_id} 
+                      href={`/categoria/${category.category_slug}/${category.category_id}`}
+                      className="category-card flex flex-col"
+                    >
+                      <div className="h-40 overflow-hidden rounded-t-lg">
+                        <img 
+                          src={category.category_image || 'https://via.placeholder.com/400x250?text=Categoria'} 
+                          alt={category.category_title}
+                          className="w-full h-full object-cover transition-transform duration-300 transform hover:scale-105"
+                        />
+                      </div>
+                      <div className="p-6 flex-1 flex flex-col">
+                        <h3 className="category-name mb-2">{category.category_title}</h3>
+                        {category.category_description && (
+                          <p className="text-gray-600 mb-4 line-clamp-2">{category.category_description}</p>
+                        )}
+                        <div className="mt-auto flex justify-between items-center">
+                          <span className="category-count text-sm text-gray-500">
+                            {category.category_courses_total || 0} {(category.category_courses_total === 1) ? 'curso' : 'cursos'}
+                          </span>
+                          <span className="text-primary font-medium">
+                            Explorar →
+                          </span>
+                        </div>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+                
+                <div className="flex justify-center">
+                  <a href="/categorias" className="btn btn-primary px-6 py-3">
+                    Ver todas as categorias
+                  </a>
+                </div>
+              </>
+            )}
           </div>
         </section>
 

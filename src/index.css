@@ -79,6 +79,11 @@
 
   .course-card-image {
     @apply w-full h-48 object-cover transition-transform duration-300;
+    /* Melhorias para reduzir a aparência granulada */
+    image-rendering: -webkit-optimize-contrast;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-font-smoothing: subpixel-antialiased;
   }
 
   .course-card:hover .course-card-image {
@@ -532,6 +537,11 @@
 
 main {
   @apply flex-grow;
+}
+
+/* Classe para aplicar espaçamento abaixo do header fixo */
+.page-container {
+  @apply pt-16 md:pt-20;
 }
 
 /* Categorias Dropdown */

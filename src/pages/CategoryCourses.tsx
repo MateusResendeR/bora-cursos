@@ -10,12 +10,9 @@ import { FaUserGraduate, FaClock, FaVideo, FaRegFilePdf, FaCheck } from 'react-i
 export function CategoryCourses() {
   const { categoryId, slug } = useParams<{ categoryId: string, slug: string }>();
   const [courses, setAllCourses] = useState<Course[]>([]);
-  const [visibleCourses, setVisibleCourses] = useState<Course[]>([]);
   const [category, setCategory] = useState<Category | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState<number>(1);
-  const coursesPerPage = 6;
 
   useEffect(() => {
     const fetchCategoryAndCourses = async () => {
@@ -42,10 +39,8 @@ export function CategoryCourses() {
         
         if (coursesData && coursesData.length > 0) {
           setAllCourses(coursesData);
-          setVisibleCourses(coursesData.slice(0, coursesPerPage));
         } else {
           setAllCourses([]);
-          setVisibleCourses([]);
         }
       } catch (err) {
         setError('Erro ao carregar os cursos. Por favor, tente novamente mais tarde.');
@@ -58,15 +53,6 @@ export function CategoryCourses() {
     fetchCategoryAndCourses();
   }, [categoryId]);
 
-  const loadMoreCourses = () => {
-    const nextPage = page + 1;
-    const nextCourses = courses.slice(0, nextPage * coursesPerPage);
-    setVisibleCourses(nextCourses);
-    setPage(nextPage);
-  };
-
-  const hasMoreCourses = visibleCourses.length < courses.length;
-
   const formatPrice = (price: string) => {
     if (!price || price === '0') return 'Gratuito';
     return new Intl.NumberFormat('pt-BR', {
@@ -76,13 +62,28 @@ export function CategoryCourses() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <main className="page-container container mx-auto px-4 py-8">
       {category && (
         <div className="mb-8">
-          <h2 className="section-title text-center">{category.category_title}</h2>
-          {category.category_description && (
-            <p className="section-subtitle text-center">{category.category_description}</p>
-          )}
+          <div className="flex flex-col items-center">
+            {category.category_image && (
+              <div className="w-24 h-24 mb-4 overflow-hidden rounded-full border-4 border-white shadow-lg">
+                <img 
+                  src={category.category_image} 
+                  alt={category.category_title}
+                  className="w-full h-full object-cover filter contrast-[1.03] brightness-[1.05]"
+                  loading="eager"
+                  style={{ imageRendering: 'auto' }}
+                />
+              </div>
+            )}
+            <h2 className="section-title text-center">{category.category_title}</h2>
+            {category.category_description && (
+              <p className="text-center text-gray-600 text-sm max-w-2xl mx-auto">
+                {category.category_description}
+              </p>
+            )}
+          </div>
         </div>
       )}
       
@@ -98,7 +99,7 @@ export function CategoryCourses() {
         </div>
       )}
       
-      {!loading && !error && visibleCourses.length === 0 && (
+      {!loading && !error && courses.length === 0 && (
         <div className="text-center py-12 bg-gray-50 rounded-lg">
           <h2 className="text-xl font-medium text-gray-600">Nenhum curso encontrado para esta categoria</h2>
           <p className="mt-2 text-gray-500">Tente explorar outras categorias ou volte mais tarde</p>
@@ -111,16 +112,18 @@ export function CategoryCourses() {
         </div>
       )}
       
-      {visibleCourses.length > 0 && (
+      {courses.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-          {visibleCourses.map((course) => (
+          {courses.map((course) => (
             <a href={`/curso/${course.course_slug}`} className="block h-full" key={course.course_id}>
               <div className="course-card flex flex-col h-full">
                 <div className="relative">
                   <img 
                     src={course.course_image || 'https://via.placeholder.com/300x180?text=Sem+Imagem'} 
                     alt={course.course_title} 
-                    className="course-card-image h-48 w-full object-cover"
+                    className="course-card-image h-48 w-full object-cover shadow-sm filter contrast-[1.02] brightness-[1.05]"
+                    loading="lazy"
+                    style={{ imageRendering: 'auto' }}
                   />
                   {course.course_free === 1 && (
                     <div className="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
@@ -175,17 +178,6 @@ export function CategoryCourses() {
               </div>
             </a>
           ))}
-        </div>
-      )}
-      
-      {hasMoreCourses && !loading && (
-        <div className="flex justify-center mt-8">
-          <button
-            onClick={loadMoreCourses}
-            className="px-6 py-3 bg-primary text-white font-medium rounded-md hover:bg-primary-dark transition-colors"
-          >
-            Mostrar mais cursos
-          </button>
         </div>
       )}
     </main>

@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { 
   courseService, 
   authService, 
-  userService,
-  paymentService,
   Course
 } from '../../services/api';
 
