@@ -1,4 +1,4 @@
-import { FaPlay, FaStar, FaGraduationCap, FaCertificate, FaHeadset, FaUserGraduate, FaClock, FaMobileAlt, FaCheck, FaHeadphones, FaRocket, FaInfinity, FaCrown } from 'react-icons/fa';
+import { FaPlay, FaStar, FaGraduationCap, FaCertificate, FaHeadset, FaUserGraduate, FaClock, FaMobileAlt, FaCheck, FaInfinity, FaCrown } from 'react-icons/fa';
 import { AiFillStar } from 'react-icons/ai';
 import { useEffect, useState, useRef } from 'react';
 import { Category } from '../types/Category';

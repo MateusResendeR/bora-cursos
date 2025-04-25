@@ -530,8 +530,6 @@ export function CourseDetail() {
               {topics.length > 0 ? (
                 <div className="space-y-4">
                   {topics.map((topic, topicIndex) => {
-                    // Calcular duração total deste tópico
-                    const topicDuration = topic.lessons?.reduce((acc, lesson) => acc + (lesson.lesson_duration || 0), 0) || 0;
                     // Contar aulas concluídas neste tópico
                     const completedLessons = topic.lessons?.filter(lesson => lesson.lesson_completed).length || 0;
                     

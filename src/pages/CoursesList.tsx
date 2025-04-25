@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { Course } from '../types/Course';
 import apiClient from '../services/api/client';
-import { FaUserGraduate, FaSearch, FaFilter } from 'react-icons/fa';
+import { FaUserGraduate, FaSearch } from 'react-icons/fa';
 import { AiFillStar } from 'react-icons/ai';
 
 interface CourseResponse {
