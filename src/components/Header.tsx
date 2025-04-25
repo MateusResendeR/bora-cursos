@@ -1,4 +1,3 @@
-import { FaSearch } from 'react-icons/fa';
 
 export function Header() {
   return (
@@ -7,16 +6,6 @@ export function Header() {
         <div className="header-content">
           <div className="header-logo cursor-pointer" onClick={() => window.location.href = '/'}>
             <img src={'/boracursos.png'} alt="Logo" className="w-[100px]" />
-          </div>
-          <div className="header-search">
-            <div className="relative w-full">
-              <input
-                type="text"
-                placeholder="Buscar cursos..."
-                className="header-search-input"
-              />
-              <FaSearch className="header-search-icon" />
-            </div>
           </div>
 
           <div className="header-actions">

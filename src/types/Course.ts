@@ -31,6 +31,15 @@ export interface Course {
   };
   course_rating_abs: number;
   course_price: string;
+  course_user?: {
+    user_id: number;
+    user_course_completed: number;
+    user_course_grade: number;
+    user_course_format: number;
+  };
+  topics?: CourseTopic[];
+  course_topics?: string[];
+  course_chapters?: CourseChapter[];
 }
 
 export interface CourseResponse {
@@ -39,4 +48,26 @@ export interface CourseResponse {
   CURRENT_PAGE: number;
   COURSES: Course[];
   COURSES_TOTAL: number;
+}
+
+export interface CourseTopic {
+  topic_id: number | string;
+  topic_title: string;
+  topic_description?: string;
+  topic_order: number;
+  lessons?: CourseLesson[];
+}
+
+export interface CourseLesson {
+  lesson_id: number | string;
+  lesson_title: string;
+  lesson_duration: number;
+  lesson_order: number;
+  lesson_free: number | null;
+  lesson_completed?: boolean;
+}
+
+export interface CourseChapter {
+  chapter_title: string;
+  chapter_topics: string[];
 } 

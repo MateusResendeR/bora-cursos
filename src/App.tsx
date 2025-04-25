@@ -5,6 +5,7 @@ import { Home } from './pages/Home';
 import { Categories } from './pages/Categories';
 import { CategoryCourses } from './pages/CategoryCourses';
 import { CourseDetail } from './pages/CourseDetail';
+import CoursesList from './pages/CoursesList';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/categorias" element={<Categories />} />
           <Route path="/categoria/:slug/:categoryId" element={<CategoryCourses />} />
           <Route path="/curso/:slug" element={<CourseDetail />} />
+          <Route path="/cursos" element={<CoursesList />} />
         </Routes>
         <Footer />
       </div>

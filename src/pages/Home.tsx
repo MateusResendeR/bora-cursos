@@ -148,9 +148,9 @@ export const Home = () => {
                 Aprenda com os melhores instrutores e desenvolva habilidades que o mercado exige
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors flex items-center justify-center">
+                <a href="/cursos" className="bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors flex items-center justify-center">
                   <FaPlay className="mr-2" /> Explorar Cursos
-                </button>
+                </a>
                 <button 
                   className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary transition-colors"
                   onClick={() => planoRef.current?.scrollIntoView({ behavior: 'smooth' })}
@@ -436,11 +436,15 @@ export const Home = () => {
 
                     <h3 className="text-xl font-bold text-gray-800 mb-2">Plano Ilimitado</h3>
                     <div className="unlimited-plan-price">
+                      <span className="unlimited-plan-price-currency">12x de</span>
                       <span className="unlimited-plan-price-currency">R$</span>
-                      79,90
-                      <span className="unlimited-plan-price-period">/mês</span>
+                      49,85
                     </div>
-                    <p className="text-sm text-gray-600">Cancele quando quiser</p>
+                    <div className="unlimited-plan-price-period">
+                      <span className="unlimited-plan-price-period-currency">R$</span>
+                      598,20
+                      <span className="unlimited-plan-price-period-currency"> à vista</span>
+                    </div>
                   </div>
 
                   <div className="unlimited-plan-features">
@@ -449,16 +453,8 @@ export const Home = () => {
                       <span>Acesso ilimitado a todos os cursos</span>
                     </div>
                     <div className="unlimited-plan-feature">
-                      <FaRocket className="unlimited-plan-feature-icon" />
-                      <span>Conteúdo novo semanalmente</span>
-                    </div>
-                    <div className="unlimited-plan-feature">
                       <FaGraduationCap className="unlimited-plan-feature-icon" />
                       <span>Certificados ilimitados</span>
-                    </div>
-                    <div className="unlimited-plan-feature">
-                      <FaHeadphones className="unlimited-plan-feature-icon" />
-                      <span>Suporte prioritário 24/7</span>
                     </div>
                     <div className="unlimited-plan-feature">
                       <FaMobileAlt className="unlimited-plan-feature-icon" />
@@ -474,10 +470,6 @@ export const Home = () => {
                     Começar Agora
                     <span className="ml-2">→</span>
                   </button>
-
-                  <p className="text-center text-xs text-gray-500 mt-2">
-                    7 dias de garantia de reembolso total
-                  </p>
                 </div>
               </div>
             </div>
