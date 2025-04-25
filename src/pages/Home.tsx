@@ -1,8 +1,11 @@
 import { FaPlay, FaStar, FaGraduationCap, FaCertificate, FaHeadset, FaUserGraduate, FaClock, FaMobileAlt, FaCheck, FaHeadphones, FaRocket, FaInfinity, FaCrown } from 'react-icons/fa';
 import { AiFillStar } from 'react-icons/ai';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Category } from '../types/Category';
 import categoryService from '../services/api/categoryService';
+import { Course } from '../types/Course';
+import courseService from '../services/api/courseService';
+import apiClient from '../services/api/client';
 
 // Depoimentos
 const testimonials = [
@@ -32,9 +35,22 @@ const testimonials = [
   },
 ];
 
+interface CourseResponse {
+  STATE: number;
+  TOTAL_PAGES: number;
+  CURRENT_PAGE: number;
+  COURSES: Course[];
+  COURSES_TOTAL: number;
+}
+
 export const Home = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
+  const [recentCourses, setRecentCourses] = useState<Course[]>([]);
+  const [loadingRecentCourses, setLoadingRecentCourses] = useState<boolean>(true);
+  const [popularCourses, setPopularCourses] = useState<Course[]>([]);
+  const [loadingPopularCourses, setLoadingPopularCourses] = useState<boolean>(true);
+  const planoRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -58,7 +74,63 @@ export const Home = () => {
       }
     };
 
+    const fetchRecentCourses = async () => {
+      try {
+        setLoadingRecentCourses(true);
+        
+        // Preparar os dados para a requisição
+        const token = '7d397d28e2fba2e015145d521c843ed7bdd01025'; // Token fixo para desenvolvimento
+        const formData = new FormData();
+        formData.append('token', token);
+        formData.append('order', 'date'); // Ordenar por data (mais recentes)
+        formData.append('results', '3'); // Limitar a 3 resultados
+        
+        const response = await apiClient.post<CourseResponse>('/api/course/get-courses', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        });
+        
+        if (response && response.COURSES) {
+          setRecentCourses(response.COURSES);
+        }
+      } catch (err) {
+        console.error('Erro ao buscar cursos recentes:', err);
+      } finally {
+        setLoadingRecentCourses(false);
+      }
+    };
+    
+    const fetchPopularCourses = async () => {
+      try {
+        setLoadingPopularCourses(true);
+        
+        // Preparar os dados para a requisição
+        const token = '7d397d28e2fba2e015145d521c843ed7bdd01025'; // Token fixo para desenvolvimento
+        const formData = new FormData();
+        formData.append('token', token);
+        formData.append('order', 'relevance'); // Ordenar por relevância (mais populares)
+        formData.append('results', '3'); // Limitar a 3 resultados
+        
+        const response = await apiClient.post<CourseResponse>('/api/course/get-courses', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        });
+        
+        if (response && response.COURSES) {
+          setPopularCourses(response.COURSES);
+        }
+      } catch (err) {
+        console.error('Erro ao buscar cursos populares:', err);
+      } finally {
+        setLoadingPopularCourses(false);
+      }
+    };
+
     fetchCategories();
+    fetchRecentCourses();
+    fetchPopularCourses();
   }, []);
 
   return (
@@ -80,7 +152,10 @@ export const Home = () => {
                 <button className="bg-white text-primary px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-colors flex items-center justify-center">
                   <FaPlay className="mr-2" /> Explorar Cursos
                 </button>
-                <button className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary transition-colors">
+                <button 
+                  className="bg-transparent border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-primary transition-colors"
+                  onClick={() => planoRef.current?.scrollIntoView({ behavior: 'smooth' })}
+                >
                   Ver Planos
                 </button>
               </div>
@@ -114,89 +189,62 @@ export const Home = () => {
 
         <section className="py-16 bg-gray-50">
             <div className="container">
-              <h2 className="section-title text-center">Cursos Mais Vendidos</h2>
+              <h2 className="section-title text-center">Cursos Mais Relevantes</h2>
               <p className="section-subtitle text-center">
                 Os cursos mais populares escolhidos por nossa comunidade
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-                <a href="/curso/desenvolvimento-web-full-stack" className="block">
-                  <div className="course-card">
-                    <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800" alt="Curso de Web Development" className="course-card-image" />
-                    <div className="course-card-content">
-                      <div className="course-card-rating">
-                        {[...Array(5)].map((_, i) => (
-                          <AiFillStar key={i} />
-                        ))}
-                        <span className="ml-2 text-gray-600">(2.945)</span>
+              
+              {loadingPopularCourses && (
+                <div className="flex justify-center items-center h-40">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+                </div>
+              )}
+              
+              {!loadingPopularCourses && popularCourses.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                  {popularCourses.map((course) => (
+                    <a href={`/curso/${course.course_slug}`} className="block" key={course.course_id}>
+                      <div className="course-card">
+                        <img 
+                          src={course.course_image || "https://via.placeholder.com/800x450?text=Sem+Imagem"} 
+                          alt={course.course_title} 
+                          className="course-card-image" 
+                        />
+                        <div className="course-card-content">
+                          <div className="course-card-rating">
+                            {[...Array(Math.round(course.course_rating || 5))].map((_, i) => (
+                              <AiFillStar key={i} className="text-yellow-400" />
+                            ))}
+                            <span className="ml-2 text-gray-600">
+                              ({course.course_rating_abs || 0})
+                            </span>
+                          </div>
+                          <h3 className="course-card-title">{course.course_title}</h3>
+                          <p className="course-card-instructor">
+                            <FaUserGraduate className="inline mr-2" />
+                            {course.course_teacher?.teacher_name || "Professor"}
+                          </p>
+                          <div className="flex items-center justify-between mt-4">
+                            <p className="course-card-price">
+                              {course.course_free === 1 ? 'Gratuito' : `R$ ${course.course_price}`}
+                            </p>
+                            <p className="course-card-students">
+                              <FaUserGraduate className="inline mr-1" />
+                              {course.course_students} alunos
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <h3 className="course-card-title">Desenvolvimento Web Full Stack</h3>
-                      <p className="course-card-instructor">
-                        <FaUserGraduate className="inline mr-2" />
-                        Prof. André Santos
-                      </p>
-                      <div className="flex items-center justify-between mt-4">
-                        <p className="course-card-price">R$ 399,90</p>
-                        <p className="course-card-students">
-                          <FaUserGraduate className="inline mr-1" />
-                          15.234 alunos
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-
-                <a href="/curso/python-para-data-science" className="block">
-                  <div className="course-card">
-                    <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=800" alt="Curso de Python" className="course-card-image" />
-                    <div className="course-card-content">
-                      <div className="course-card-rating">
-                        {[...Array(5)].map((_, i) => (
-                          <AiFillStar key={i} />
-                        ))}
-                        <span className="ml-2 text-gray-600">(1.847)</span>
-                      </div>
-                      <h3 className="course-card-title">Python para Data Science</h3>
-                      <p className="course-card-instructor">
-                        <FaUserGraduate className="inline mr-2" />
-                        Profa. Marina Lima
-                      </p>
-                      <div className="flex items-center justify-between mt-4">
-                        <p className="course-card-price">R$ 349,90</p>
-                        <p className="course-card-students">
-                          <FaUserGraduate className="inline mr-1" />
-                          12.543 alunos
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-
-                <a href="/curso/ui-ux-design-masterclass" className="block">
-                  <div className="course-card">
-                    <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800" alt="Curso de UI/UX" className="course-card-image" />
-                    <div className="course-card-content">
-                      <div className="course-card-rating">
-                        {[...Array(5)].map((_, i) => (
-                          <AiFillStar key={i} />
-                        ))}
-                        <span className="ml-2 text-gray-600">(1.532)</span>
-                      </div>
-                      <h3 className="course-card-title">UI/UX Design Masterclass</h3>
-                      <p className="course-card-instructor">
-                        <FaUserGraduate className="inline mr-2" />
-                        Prof. Carlos Oliveira
-                      </p>
-                      <div className="flex items-center justify-between mt-4">
-                        <p className="course-card-price">R$ 299,90</p>
-                        <p className="course-card-students">
-                          <FaUserGraduate className="inline mr-1" />
-                          9.876 alunos
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </div>
+                    </a>
+                  ))}
+                </div>
+              )}
+              
+              {!loadingPopularCourses && popularCourses.length === 0 && (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">Nenhum curso encontrado.</p>
+                </div>
+              )}
             </div>
           </section>
 
@@ -207,85 +255,56 @@ export const Home = () => {
               <p className="section-subtitle text-center">
                 Últimas adições ao nosso catálogo de cursos
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-                <a href="/curso/react-native-apps-mobile" className="block">
-                  <div className="course-card">
-                    <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?auto=format&fit=crop&w=800" alt="Curso de React Native" className="course-card-image" />
-                    <div className="course-card-content">
-                      <div className="flex items-center mb-2">
-                        <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
-                          <FaClock className="mr-1" />
-                          Novo
-                        </span>
+              
+              {loadingRecentCourses && (
+                <div className="flex justify-center items-center h-40">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+                </div>
+              )}
+              
+              {!loadingRecentCourses && recentCourses.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
+                  {recentCourses.map((course) => (
+                    <a href={`/curso/${course.course_slug}`} className="block" key={course.course_id}>
+                      <div className="course-card">
+                        <img 
+                          src={course.course_image || "https://via.placeholder.com/800x450?text=Sem+Imagem"} 
+                          alt={course.course_title} 
+                          className="course-card-image" 
+                        />
+                        <div className="course-card-content">
+                          <div className="flex items-center mb-2">
+                            <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
+                              <FaClock className="mr-1" />
+                              Novo
+                            </span>
+                          </div>
+                          <h3 className="course-card-title">{course.course_title}</h3>
+                          <p className="course-card-instructor">
+                            <FaUserGraduate className="inline mr-2" />
+                            {course.course_teacher?.teacher_name || "Professor"}
+                          </p>
+                          <div className="flex items-center justify-between mt-4">
+                            <p className="course-card-price">
+                              {course.course_free === 1 ? 'Gratuito' : `R$ ${course.course_price}`}
+                            </p>
+                            <p className="course-card-students">
+                              <FaUserGraduate className="inline mr-1" />
+                              {course.course_students} alunos
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <h3 className="course-card-title">React Native: Apps Mobile</h3>
-                      <p className="course-card-instructor">
-                        <FaUserGraduate className="inline mr-2" />
-                        Prof. Lucas Mendes
-                      </p>
-                      <div className="flex items-center justify-between mt-4">
-                        <p className="course-card-price">R$ 449,90</p>
-                        <p className="course-card-students">
-                          <FaUserGraduate className="inline mr-1" />
-                          1.234 alunos
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-
-                <a href="/curso/machine-learning-na-pratica" className="block">
-                  <div className="course-card">
-                    <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800" alt="Curso de Machine Learning" className="course-card-image" />
-                    <div className="course-card-content">
-                      <div className="flex items-center mb-2">
-                        <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
-                          <FaClock className="mr-1" />
-                          Novo
-                        </span>
-                      </div>
-                      <h3 className="course-card-title">Machine Learning na Prática</h3>
-                      <p className="course-card-instructor">
-                        <FaUserGraduate className="inline mr-2" />
-                        Prof. Rafael Costa
-                      </p>
-                      <div className="flex items-center justify-between mt-4">
-                        <p className="course-card-price">R$ 499,90</p>
-                        <p className="course-card-students">
-                          <FaUserGraduate className="inline mr-1" />
-                          876 alunos
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-
-                <a href="/curso/aws-cloud-computing" className="block">
-                  <div className="course-card">
-                    <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=800" alt="Curso de AWS" className="course-card-image" />
-                    <div className="course-card-content">
-                      <div className="flex items-center mb-2">
-                        <span className="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center">
-                          <FaClock className="mr-1" />
-                          Novo
-                        </span>
-                      </div>
-                      <h3 className="course-card-title">AWS Cloud Computing</h3>
-                      <p className="course-card-instructor">
-                        <FaUserGraduate className="inline mr-2" />
-                        Profa. Ana Beatriz
-                      </p>
-                      <div className="flex items-center justify-between mt-4">
-                        <p className="course-card-price">R$ 399,90</p>
-                        <p className="course-card-students">
-                          <FaUserGraduate className="inline mr-1" />
-                          654 alunos
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </div>
+                    </a>
+                  ))}
+                </div>
+              )}
+              
+              {!loadingRecentCourses && recentCourses.length === 0 && (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">Nenhum curso encontrado.</p>
+                </div>
+              )}
             </div>
           </section>
 
@@ -393,7 +412,7 @@ export const Home = () => {
         </section>
 
         {/* Plano Ilimitado */}
-        <section className="unlimited-plan-section">
+        <section className="unlimited-plan-section" ref={planoRef}>
             <div className="unlimited-plan-shapes">
               <div className="unlimited-plan-shape unlimited-plan-shape-1"></div>
               <div className="unlimited-plan-shape unlimited-plan-shape-2"></div>
