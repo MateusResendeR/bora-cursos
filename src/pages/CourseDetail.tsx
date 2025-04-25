@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Course } from '../types/Course';
 import courseService from '../services/api/courseService';
 import { AiFillStar } from 'react-icons/ai';
-import { FaUserGraduate, FaClock, FaVideo, FaRegFilePdf, FaCheck, FaPlayCircle, FaBookOpen, FaLaptop, FaCertificate, FaUsers, FaShoppingCart } from 'react-icons/fa';
+import { FaUserGraduate, FaClock, FaRegFilePdf, FaCheck, FaPlayCircle, FaBookOpen, FaLaptop, FaCertificate, FaUsers, FaShoppingCart } from 'react-icons/fa';
 
 export function CourseDetail() {
   const { slug } = useParams<{ slug: string }>();
