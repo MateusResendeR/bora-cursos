@@ -4,7 +4,6 @@ import { useEffect, useState, useRef } from 'react';
 import { Category } from '../types/Category';
 import categoryService from '../services/api/categoryService';
 import { Course } from '../types/Course';
-import courseService from '../services/api/courseService';
 import apiClient from '../services/api/client';
 
 // Depoimentos
