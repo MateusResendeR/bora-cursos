@@ -52,3 +52,24 @@ export default tseslint.config({
   },
 })
 ```
+
+## Deployment na Vercel
+
+Este projeto está configurado para funcionar corretamente quando hospedado na Vercel ou plataformas similares.
+
+### Configurações importantes
+
+Para garantir que as rotas funcionem corretamente em produção, dois arquivos foram adicionados:
+
+1. `vercel.json` - Configura redirecionamentos na Vercel para rotas de SPA
+2. `public/_redirects` - Adiciona suporte a redirecionamentos para Netlify e outras plataformas
+
+Essas configurações garantem que, quando um usuário acessa diretamente uma URL como `/curso/nome-do-curso`, a aplicação será carregada corretamente, em vez de retornar um erro 404.
+
+### Verificação de deploy
+
+Se você estiver tendo problemas com rotas após o deploy:
+
+1. Verifique se os arquivos `vercel.json` e `public/_redirects` estão presentes no deploy
+2. Certifique-se de que as configurações da sua plataforma de hospedagem estão corretas
+3. Para a Vercel, geralmente não é necessária nenhuma configuração adicional além do arquivo `vercel.json`
