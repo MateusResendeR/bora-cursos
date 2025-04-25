@@ -5,10 +5,10 @@ import courseService from '../services/api/courseService';
 import categoryService from '../services/api/categoryService';
 import { Category } from '../types/Category';
 import { AiFillStar } from 'react-icons/ai';
-import { FaUserGraduate, FaClock, FaVideo, FaRegFilePdf, FaCheck } from 'react-icons/fa';
+import { FaUserGraduate, FaClock } from 'react-icons/fa';
 
 export function CategoryCourses() {
-  const { categoryId, slug } = useParams<{ categoryId: string, slug: string }>();
+  const { categoryId } = useParams<{ categoryId: string }>();
   const [courses, setAllCourses] = useState<Course[]>([]);
   const [category, setCategory] = useState<Category | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

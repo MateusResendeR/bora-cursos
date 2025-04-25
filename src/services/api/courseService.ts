@@ -137,8 +137,7 @@ const courseService = {
         return [];
       } catch (error) {
         console.error('Error fetching courses from API:', error);
-        // Se não conseguirmos obter os cursos da API, usamos dados mock
-        return mockFetchCourses(categoryId);
+        return [];
       }
     } catch (error) {
       console.error('Erro ao buscar cursos para categoria:', error);
@@ -146,118 +145,5 @@ const courseService = {
     }
   }
 };
-
-// Função auxiliar para criar dados mock para desenvolvimento
-async function mockFetchCourses(categoryId: number): Promise<Course[]> {
-  console.log('Usando dados mock para categoria:', categoryId);
-  
-  // Array de cursos mock para desenvolvimento
-  const mockCourses: Course[] = [
-    {
-      course_id: 1,
-      course_title: 'Desenvolvimento Web Completo',
-      course_slug: 'desenvolvimento-web-completo',
-      course_description: 'Aprenda HTML, CSS, JavaScript, React, Node e muito mais',
-      course_image: 'https://via.placeholder.com/300x180?text=Dev+Web',
-      course_price: '399.90',
-      course_free: 0,
-      course_rating: 4.8,
-      course_rating_abs: 128,
-      course_students: 1542,
-      course_category_id: categoryId,
-      course_category_title: 'Desenvolvimento Web',
-      course_category_slug: 'desenvolvimento-web',
-      course_hours: 42,
-      course_company_id: 1,
-      course_format: 1,
-      course_captions: [],
-      course_video: '',
-      course_parent: 0,
-      course_description_knowledge: 'HTML\nCSS\nJavaScript\nReact\nNode.js',
-      course_description_prerequisites: 'Conhecimentos básicos de computação',
-      course_description_duration: '42 horas',
-      course_description_courseware: 'Arquivos PDF\nCódigos de exemplo\nProjetos práticos',
-      course_description_certification: 'Certificado de conclusão digital',
-      course_minutes: 2520,
-      course_image_aux: '',
-      course_slideshow: [],
-      course_teacher: {
-        teacher_name: 'João Silva',
-        teacher_description: 'Especialista em desenvolvimento web com mais de 10 anos de experiência',
-        teacher_image: 'https://via.placeholder.com/100x100?text=João'
-      }
-    },
-    {
-      course_id: 2,
-      course_title: 'JavaScript Avançado',
-      course_slug: 'javascript-avancado',
-      course_description: 'Domine recursos avançados de JavaScript',
-      course_image: 'https://via.placeholder.com/300x180?text=JavaScript',
-      course_price: '299.90',
-      course_free: 0,
-      course_rating: 4.6,
-      course_rating_abs: 95,
-      course_students: 1087,
-      course_category_id: categoryId,
-      course_category_title: 'Desenvolvimento Web',
-      course_category_slug: 'desenvolvimento-web',
-      course_hours: 28,
-      course_company_id: 1,
-      course_format: 1,
-      course_captions: [],
-      course_video: '',
-      course_parent: 0,
-      course_description_knowledge: 'Closures\nPromises\nAsync/Await\nDOM Manipulation\nClasses',
-      course_description_prerequisites: 'JavaScript básico',
-      course_description_duration: '28 horas',
-      course_description_courseware: 'Arquivos PDF\nExercícios práticos',
-      course_description_certification: 'Certificado de conclusão digital',
-      course_minutes: 1680,
-      course_image_aux: '',
-      course_slideshow: [],
-      course_teacher: {
-        teacher_name: 'Maria Santos',
-        teacher_description: 'Desenvolvedora front-end especialista em JavaScript',
-        teacher_image: 'https://via.placeholder.com/100x100?text=Maria'
-      }
-    },
-    {
-      course_id: 3,
-      course_title: 'React do Zero ao Avançado',
-      course_slug: 'react-zero-avancado',
-      course_description: 'Aprenda a criar aplicações modernas com React',
-      course_image: 'https://via.placeholder.com/300x180?text=React',
-      course_price: '0',
-      course_free: 1,
-      course_rating: 4.9,
-      course_rating_abs: 203,
-      course_students: 2342,
-      course_category_id: categoryId,
-      course_category_title: 'Desenvolvimento Web',
-      course_category_slug: 'desenvolvimento-web',
-      course_hours: 36,
-      course_company_id: 1,
-      course_format: 1,
-      course_captions: [],
-      course_video: '',
-      course_parent: 0,
-      course_description_knowledge: 'Componentes\nHooks\nContext API\nRedux\nNext.js',
-      course_description_prerequisites: 'JavaScript básico',
-      course_description_duration: '36 horas',
-      course_description_courseware: 'Arquivos de projeto\nCódigos de exemplo',
-      course_description_certification: 'Certificado de conclusão digital',
-      course_minutes: 2160,
-      course_image_aux: '',
-      course_slideshow: [],
-      course_teacher: {
-        teacher_name: 'Pedro Oliveira',
-        teacher_description: 'Especialista em React e ecossistema JavaScript moderno',
-        teacher_image: 'https://via.placeholder.com/100x100?text=Pedro'
-      }
-    }
-  ];
-  
-  return mockCourses;
-}
 
 export default courseService; 

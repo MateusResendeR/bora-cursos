@@ -1,4 +1,4 @@
-import { FaSearch, FaBars } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 
 export function Header() {
   return (
@@ -8,13 +8,6 @@ export function Header() {
           <div className="header-logo cursor-pointer" onClick={() => window.location.href = '/'}>
             <img src={'/boracursos.png'} alt="Logo" className="w-[100px]" />
           </div>
-
-          <nav className="header-nav">
-            <a href="/categorias" className="header-nav-link hover:text-primary transition-colors">
-              Categorias
-            </a>
-          </nav>
-
           <div className="header-search">
             <div className="relative w-full">
               <input
@@ -31,10 +24,6 @@ export function Header() {
               Entrar
             </a>
           </div>
-
-          <button className="header-mobile-menu-button">
-            <FaBars className="text-2xl" />
-          </button>
         </div>
       </div>
     </header>
